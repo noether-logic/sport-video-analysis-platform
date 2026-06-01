@@ -23,26 +23,50 @@ export function VideoCardAlt({
   onClick,
   onDownload,
 }: VideoCardAltProps) {
+  const isInProgress = status === 'in_progress';
+
   return (
     <div className="group bg-surface-container/80 backdrop-blur-sm rounded-3xl overflow-hidden hover:bg-surface-container transition-all">
       {/* Thumbnail */}
       <button
-        onClick={onClick}
-        className="relative w-full aspect-video overflow-hidden bg-surface-variant"
+        onClick={isInProgress ? undefined : onClick}
+        disabled={isInProgress}
+        className={`relative w-full aspect-video overflow-hidden bg-surface-variant ${
+          isInProgress ? 'cursor-not-allowed' : 'cursor-pointer'
+        }`}
       >
         <ImageWithFallback
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className={`w-full h-full object-cover transition-transform duration-500 ${
+            isInProgress ? 'opacity-50' : 'group-hover:scale-105'
+          }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-        {/* Play Button Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
-            <Play className="w-7 h-7 text-on-primary ml-1" fill="currentColor" />
+        {/* In Progress Overlay */}
+        {isInProgress && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+            <div className="text-center px-6">
+              <Clock className="w-12 h-12 text-white mx-auto mb-3 animate-pulse" />
+              <p className="text-white" style={{ fontSize: '1rem', fontWeight: '600' }}>
+                Разбор в процессе
+              </p>
+              <p className="text-white/80 mt-1" style={{ fontSize: '0.875rem' }}>
+                Видео будет доступно после завершения
+              </p>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Play Button Overlay - only for completed */}
+        {!isInProgress && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
+              <Play className="w-7 h-7 text-on-primary ml-1" fill="currentColor" />
+            </div>
+          </div>
+        )}
 
         {/* Duration Badge */}
         <div className="absolute bottom-3 left-3">
