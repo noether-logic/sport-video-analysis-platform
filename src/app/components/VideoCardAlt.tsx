@@ -1,4 +1,4 @@
-import { Clock, CheckCircle, Play, Download } from 'lucide-react';
+import { Clock, CheckCircle, Play } from 'lucide-react';
 import { ImageWithFallback } from './ImageWithFallback';
 
 interface VideoCardAltProps {
@@ -10,7 +10,6 @@ interface VideoCardAltProps {
   sport?: string;
   duration?: string;
   onClick: () => void;
-  onDownload?: () => void;
 }
 
 export function VideoCardAlt({
@@ -21,52 +20,28 @@ export function VideoCardAlt({
   sport,
   duration = '12:45',
   onClick,
-  onDownload,
 }: VideoCardAltProps) {
-  const isInProgress = status === 'in_progress';
 
   return (
-    <div className="group bg-surface-container/80 backdrop-blur-sm rounded-3xl overflow-hidden hover:bg-surface-container transition-all">
+    <button
+      onClick={onClick}
+      className="w-full group bg-surface-container/80 backdrop-blur-sm rounded-3xl overflow-hidden hover:bg-surface-container transition-all text-left"
+    >
       {/* Thumbnail */}
-      <button
-        onClick={isInProgress ? undefined : onClick}
-        disabled={isInProgress}
-        className={`relative w-full aspect-video overflow-hidden bg-surface-variant ${
-          isInProgress ? 'cursor-not-allowed' : 'cursor-pointer'
-        }`}
-      >
+      <div className="relative w-full aspect-video overflow-hidden bg-surface-variant">
         <ImageWithFallback
           src={imageUrl}
           alt={title}
-          className={`w-full h-full object-cover transition-transform duration-500 ${
-            isInProgress ? 'opacity-50' : 'group-hover:scale-105'
-          }`}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-        {/* In Progress Overlay */}
-        {isInProgress && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="text-center px-6">
-              <Clock className="w-12 h-12 text-white mx-auto mb-3 animate-pulse" />
-              <p className="text-white" style={{ fontSize: '1rem', fontWeight: '600' }}>
-                Разбор в процессе
-              </p>
-              <p className="text-white/80 mt-1" style={{ fontSize: '0.875rem' }}>
-                Видео будет доступно после завершения
-              </p>
-            </div>
+        {/* Play Button Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
+            <Play className="w-7 h-7 text-on-primary ml-1" fill="currentColor" />
           </div>
-        )}
-
-        {/* Play Button Overlay - only for completed */}
-        {!isInProgress && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
-              <Play className="w-7 h-7 text-on-primary ml-1" fill="currentColor" />
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* Duration Badge */}
         <div className="absolute bottom-3 left-3">
@@ -98,7 +73,7 @@ export function VideoCardAlt({
             </span>
           )}
         </div>
-      </button>
+      </div>
 
       {/* Content */}
       <div className="p-5">
@@ -110,22 +85,8 @@ export function VideoCardAlt({
           <span className="text-on-surface-variant" style={{ fontSize: '0.875rem' }}>
             {uploadDate}
           </span>
-
-          {status === 'completed' && onDownload && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDownload();
-              }}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-blue-600 text-on-primary rounded-full hover:shadow-lg transition-all"
-              style={{ fontSize: '0.875rem', fontWeight: '500' }}
-            >
-              <Download className="w-4 h-4" />
-              Скачать
-            </button>
-          )}
         </div>
       </div>
-    </div>
+    </button>
   );
 }

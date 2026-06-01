@@ -3,12 +3,14 @@ import { Header } from './components/Header';
 import { VideoGridAlt } from './components/VideoGridAlt';
 import { TopUpModal } from './components/TopUpModal';
 import { OrderModal } from './components/OrderModal';
+import { VideoDetailModal } from './components/VideoDetailModal';
 import { Upload } from 'lucide-react';
 
 export default function App() {
   const [balance] = useState(12500);
   const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
 
   const videos = [
     {
@@ -103,12 +105,14 @@ export default function App() {
   };
 
   const handleVideoClick = (videoId: string) => {
-    console.log('Открыть видео:', videoId);
+    setSelectedVideoId(videoId);
   };
 
   const handleDownload = (videoId: string) => {
     console.log('Скачать видео:', videoId);
   };
+
+  const selectedVideo = videos.find(v => v.id === selectedVideoId) || null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-50/30">
@@ -142,7 +146,6 @@ export default function App() {
         <VideoGridAlt
           videos={videos}
           onVideoClick={handleVideoClick}
-          onDownload={handleDownload}
         />
       </main>
 
@@ -154,6 +157,13 @@ export default function App() {
       <OrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
+      />
+
+      <VideoDetailModal
+        video={selectedVideo}
+        isOpen={selectedVideoId !== null}
+        onClose={() => setSelectedVideoId(null)}
+        onDownload={handleDownload}
       />
     </div>
   );

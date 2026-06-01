@@ -13,10 +13,9 @@ interface Video {
 interface VideoGridAltProps {
   videos: Video[];
   onVideoClick: (videoId: string) => void;
-  onDownload: (videoId: string) => void;
 }
 
-export function VideoGridAlt({ videos, onVideoClick, onDownload }: VideoGridAltProps) {
+export function VideoGridAlt({ videos, onVideoClick }: VideoGridAltProps) {
   if (videos.length === 0) {
     return (
       <div className="bg-surface-container/60 backdrop-blur-xl rounded-3xl p-20 text-center">
@@ -40,7 +39,6 @@ export function VideoGridAlt({ videos, onVideoClick, onDownload }: VideoGridAltP
           key={video.id}
           {...video}
           onClick={() => onVideoClick(video.id)}
-          onDownload={video.status === 'completed' ? () => onDownload(video.id) : undefined}
         />
       ))}
     </div>
