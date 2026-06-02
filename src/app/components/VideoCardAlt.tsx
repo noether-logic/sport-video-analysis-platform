@@ -76,16 +76,14 @@ export function VideoCardAlt({
       </div>
 
       {/* Content */}
-      <div className="p-5">
-        <h3 className="text-on-surface mb-3 line-clamp-2" style={{ fontSize: '1.125rem', fontWeight: '600', lineHeight: '1.4' }}>
+      <div className="px-4 py-3">
+        <h3 className="text-on-surface mb-2 line-clamp-2" style={{ fontSize: '1.125rem', fontWeight: '600', lineHeight: '1.4' }}>
           {title}
         </h3>
 
-        <div className="flex items-center justify-between pt-3">
-          <span className="text-on-surface-variant" style={{ fontSize: '0.875rem' }}>
-            {uploadDate}
-          </span>
-        </div>
+        <span className="text-on-surface-variant" style={{ fontSize: '0.875rem' }}>
+          {uploadDate}
+        </span>
       </div>
     </button>
   );
